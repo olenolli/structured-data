@@ -80,7 +80,6 @@
     (if (and (<= obl-x ibl-x itr-x otr-x)
              (<= obl-y ibl-y itr-y otr-y)) true false)))
 
-
 (defn title-length [book]
   "counts the length of the book’s title."
   (count (:title book)))
@@ -139,28 +138,42 @@
   (if (= (count a-seq) (count (set a-seq))) false true))
 
 (defn old-book->new-book [book]
-  :-)
+  "takes a book with the previous representation (authors in a vector) and returns the same book in the new representation (authors in a set)."
+  (assoc book :authors (set (:authors book))))
+
 
 (defn has-author? [book author]
-  :-)
+  "returns true if author is in the authors of book and otherwise false."
+  (contains? (:authors book) author))
 
 (defn authors [books]
-  :-)
+  "returns the authors of every book in books as a set."
+  (apply clojure.set/union (map :authors books)))
 
 (defn all-author-names [books]
-  :-)
+  (set (map :name (authors books))))
 
 (defn author->string [author]
-  :-)
+  "returns a string representation of author"
+
+  (let [name (:name author)
+        year (str " (" (:birth-year author) " - " (:death-year author) ")") ]
+
+    (if (:birth-year author)
+      (str name year)
+      (str name))))
 
 (defn authors->string [authors]
-  :-)
+  "takes a sequence of authors as a parameter and returns a string representation of authors"
+  (apply str (interpose ", " (map author->string authors))))
 
 (defn book->string [book]
-  :-)
+  "takes a single book as a parameter and returns a string representation of book"
+  (str (:title book) ", written by " (authors->string (:authors book))))
 
 (defn books->string [books]
-  :-)
+  "takes a sequence of books as a parameter and returns a string representation of books"
+  (str (count books)))
 
 (defn books-by-author [author books]
   :-)
